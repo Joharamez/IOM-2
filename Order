@@ -1,0 +1,119 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+public class Order {
+	   private int orderId;
+	   private int customerReference;
+	   private LinkedList <Integer> products = new LinkedList <Integer> ();  
+	   private double totalPrice;
+	   private LocalDate date;
+	   public String status; 
+
+	    public Order() {
+	        this.orderId = 0;
+	        this.customerReference = 0;
+	        this.totalPrice = 0;
+	        this.status = "";
+	    }
+
+	    public Order(int orderId, int customerReference, Integer [] productIDs, double totalPrice, String date, String status) {
+	        this.orderId = orderId;
+	        this.customerReference = customerReference;
+	        this.totalPrice = totalPrice;
+	        this.date = LocalDate.parse(date);
+	        this.status = status;
+	        
+	        for (int i = 0 ; i < productIDs.length ; i++)
+	        products.insert(productIDs[i]);
+	    }
+
+	    public int getOrderId() {
+	        return orderId;
+	    }
+
+	    public int getCustomerRefrence() {
+	        return customerReference;
+	    }
+
+	    public LinkedList<Integer> getProducts() {
+	        return products;
+	    }
+
+	    public double getTotalPrice() {
+	        return totalPrice;
+	    }
+
+	    public LocalDate getDate() {
+	        return date;
+	    }
+
+	    public String getStatus() {
+	        return status;
+	    }
+
+	    public void setOrderId(int orderId) {
+	        this.orderId = orderId;
+	    }
+
+	    public void setCustomerReference(int customerReference) {
+	        this.customerReference = customerReference;
+	    }
+
+	    public void setProducts(int productID) {
+	        this.products.insert(productID);
+	    }
+
+	    public void setTotalPrice(double total_price) {
+	        this.totalPrice = total_price;
+	    }
+
+	    public void setDate(LocalDate date) {
+	        this.date = date;
+	    }
+
+	    public void setStatus(String status) {
+	        this.status = status;
+	    }
+
+	    public void addProduct(Integer product){
+	    	products.insert(product);
+	    }
+
+	    public boolean removeProduct(Integer productID) {
+	        if (!products.empty()) {
+	        	products.findFirst();
+	            while(!products.last()) {
+	                if (products.retrieve() == productID) {
+	                	products.remove();
+	                    return true;
+	                }
+	                else
+	                	products.findNext();
+	            }
+	            if (products.retrieve() == productID) { //Checks the last element in the list
+	                products.remove();
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+	   
+	    
+	    public String toString() {
+	        String str =  "\nORDERS:" + "Order Id:" + orderId + "\nCustomer Reference:" + customerReference 
+	                + "\nTotal price:" + totalPrice  + "\nStatus:" + status + "\nDate:" + date;
+	        if (!products.empty()) {
+	            str += "Products List" ;
+	            products.findFirst();
+	            while(!products.last()) {
+	                str += "\n" + products.retrieve();
+	                products.findNext();
+	            }
+	            str += products.retrieve();// for the last element
+	        }
+	        return str;        
+	    }
+
+
+}
