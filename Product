@@ -1,8 +1,6 @@
-package src;
-
 public class Product {
 	
-	private int productID; //product ID
+	public int productID; //product ID
 	private String name; //product name
 	private double price; //product price
 	private int stock; 
@@ -104,7 +102,7 @@ public class Product {
         return false; //if list is empty or review is not found
     }
     
-    @Override
+    
     public String toString() {
         String str =  "\nProduct ID: " + productID + "\nName: " + name + "\nPrice: " + price + "\nStock:" + stock;
         if (!reviews.empty()) //check that list is not empty
