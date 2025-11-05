@@ -1,0 +1,155 @@
+package src;
+import java.io.File;
+import java.util.Scanner;
+public class CustomerDatabase {
+
+    public static Scanner input = new Scanner (System.in);
+    public static LinkedList<Customer> customerList = new LinkedList<Customer> ();
+   
+
+    public LinkedList<Customer> getCustomerList ( )
+    {
+        return customerList;
+    }
+
+
+    public CustomerDatabase(String fileName)
+    {
+            try{
+                File file = new File(fileName);
+                Scanner read = new Scanner (file);
+                String line = read.nextLine(); //Reads but never uses to get rid of the header.
+                
+                while(read.hasNext())
+                {
+                    line = read.nextLine();
+                    String [] customerData = line.split(","); //Data is stored in CSV (Comma Separated File)
+                    Customer customer = new Customer(Integer.parseInt(customerData[0]),customerData[1], customerData[2] );
+                    customerList.insert(customer);
+                }
+                read.close();
+            }
+            catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+    }
+  
+
+    public void registerCustomer()
+{
+    	Customer customer = new Customer ();
+
+    	System.out.println("Enter customer's ID: ");
+    	customer.setCustomerId(input.nextInt());
+    
+    	while (checkCustomerID(customer.getCustomerId()))
+    {
+    		System.out.println("Customer with the entered ID already registered.\nKindly re-enter the ID.");
+    		customer.setCustomerId(input.nextInt());
+    }    
+    
+    	System.out.println("Enter the customer's name: ");
+    	String name = input.nextLine();
+    	name = input.nextLine();
+    	customer.setName(name);
+    
+    	System.out.println("Enter customer's email: ");
+    	customer.setEmail(input.nextLine());
+
+    	customerList.insert(customer);
+}
+    
+
+
+    public void orderHistory()
+{
+        if (customerList.empty())
+        {
+            System.out.println("There is no order history.");
+        }
+        else
+        {
+            System.out.println("Enter customer's ID: ");
+            int customerID = input.nextInt();
+            
+            boolean exists = false;
+            
+            customerList.findFirst();
+            for ( int i = 0 ; i < customerList.size() ; i++ )
+            {
+                if (customerList.retrieve().getCustomerId() == customerID)
+                {
+                    exists = true;
+                    break;
+                }
+                customerList.findNext();
+            }
+            
+            if (exists)
+            {
+                LinkedList<Integer> orderList = customerList.retrieve().getOrders();
+                if (orderList.empty())
+                    System.out.println("No past orders for " + customerList.retrieve().getCustomerId());
+                else
+                {
+                    System.out.println("Order History: ");
+                    orderList.findFirst();
+                    for (int j = 0 ; j < orderList.size() ; j++)
+                    {
+                        System.out.println(orderList.retrieve());
+                        orderList.findNext();
+                    }
+                 }
+            }
+            else
+                System.out.println("Customer ID doesn't exist.");
+        }
+        
+    }
+    
+
+    public boolean checkCustomerID(int customerID)
+    {
+        boolean exists = false;
+        if (!customerList.empty())
+        {
+            customerList.findFirst();
+            while (!customerList.last())
+            {
+                if (customerList.retrieve().getCustomerId() == customerID)
+                    exists = true; //Customer has been found.
+                customerList.findNext(); //Moves to the next customer.
+            }
+            if (customerList.retrieve().getCustomerId() == customerID) //Last element.
+                exists = true;
+        }
+        return exists ;
+    }
+        
+    public Customer getCustomerID()
+    {
+        if (customerList.empty())
+        {
+            System.out.println("There is no customer data.");
+        }
+        else
+        {
+            System.out.println("Enter customer's ID: ");
+            int customerID = input.nextInt();
+            
+            customerList.findFirst();
+            while (!customerList.last())
+            {
+                if (customerList.retrieve().getCustomerId() == customerID)
+                    return customerList.retrieve();
+                customerList.findNext();
+            }
+            if (customerList.retrieve().getCustomerId() == customerID) //Last element.
+                return customerList.retrieve();        
+            
+        }
+        System.out.println("Customer ID doesn't exist."); //The loop is done, the id wasn't found.
+        return null;
+    }
+
+}
