@@ -2,16 +2,16 @@
 public class LinkedPQ <T>{
 	 class PQNode <T> {
 	        public T data;
-	        public int priority;
+	        public double priority;
 	        public PQNode<T> next;
 
 	        public PQNode() {
 	                next = null;
 	        }
 
-	        public PQNode(T e, int p) {
+	        public PQNode(T e, double pty) {
 	                data = e;
-	                priority = p;
+	                priority = pty;
 	        }
 
 	        
@@ -24,7 +24,7 @@ public class LinkedPQ <T>{
 	            this.data = data;
 	        }
 
-	        public int getPriority() {
+	        public double getPriority() {
 	            return priority;
 	        }
 
@@ -56,7 +56,7 @@ public class LinkedPQ <T>{
 	            return false;
 	    }
 
-	    public void enqueue(T e, int pty) {
+	    public void enqueue(T e, double pty) {
 	            PQNode<T> tmp = new PQNode<T>(e, pty);
 	            if((size == 0) || (pty > head.priority)) {
 	                    tmp.next = head;
