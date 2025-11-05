@@ -1,0 +1,285 @@
+package src;
+
+import java.io.File;
+import java.util.Scanner;
+
+public class ProductDatabase {
+	
+	public static Scanner input = new Scanner (System.in);
+    public static LinkedList<Product> products = new LinkedList<Product> (); //linked list to store all products
+
+    public LinkedList<Product> getProductDatabase() { //returns the list of all products
+        return products;
+    }
+    
+    public ProductDatabase(String fileName)
+    {
+        
+       try{
+                File file = new File(fileName);
+                Scanner read = new Scanner (file);
+                String line = read.nextLine(); //skips header line
+                
+                while(read.hasNext()) //read the file line by line
+                {
+                    line = read.nextLine();
+                    String [] data = line.split(","); //data is stored in CSV
+                    
+                    int productID = Integer.parseInt(data[0]);
+                    String name =  data[1].trim(); //to remove spaces
+                    double price = Double.parseDouble(data[2]);
+                    int stock = Integer.parseInt(data[3]);
+
+                    Product product = new Product(productID, name, price, stock );
+                    products.insert(product);
+                }
+                read.close();
+            }
+            catch (Exception ex) {
+                System.out.println(ex.getMessage()); //print error if file not found or corrupted
+            }
+    }
+ 
+    public void addProduct() //add new product to database
+    {
+        System.out.println("Enter product ID:");
+        int pID = input.nextInt();
+        
+        while (checkProductID(pID))
+        {
+            System.out.println("ID already taken, enter different product ID again:");
+            pID = input.nextInt();
+        }
+        
+        System.out.println("Enter product name:");
+        String name =input.next();
+        
+        System.out.println("Enter product price:");
+        double price = input.nextDouble();
+        
+        System.out.println("Enter product stock:");
+        int stock = input.nextInt();
+        
+        Product product = new Product(pID, name, price, stock);
+        products.findFirst();
+        products.insert(product);
+    }
+    
+    public Product searchProductID() //searches for a product by its ID 
+
+    {
+        if (products.empty())
+        {
+            System.out.println("Products are Empty");
+        }
+        else
+        {
+            System.out.println("Enter product ID: ");
+            int productID = input.nextInt();
+            
+            boolean exists = false;
+            
+            products.findFirst();
+            while (!products.last())
+            {
+                if (products.retrieve().getProductId()==productID)
+                {
+                    exists = true;
+                    break;
+                }
+                products.findNext();
+            }
+            if (products.retrieve().getProductId()==productID) //to check the last element
+                exists = true;
+        
+            if (exists )
+                return products.retrieve(); //return the founded product
+        }
+        System.out.println("No product with this ID");
+        return null;
+    }
+
+    public Product removeProduct() //removes a product by ID (sets its stock to zero)
+    {
+        if (products.empty()) {
+        	System.out.println("There are no products");
+        }
+        else
+        {
+            System.out.println("Enter product ID: ");
+            int productID = input.nextInt();
+            
+            boolean exists = false;
+            
+            products.findFirst();
+            while (!products.last())
+            {
+                if (products.retrieve().getProductId()==productID)
+                {
+                    exists = true;
+                    break;
+                }
+                products.findNext();
+            }
+            if (products.retrieve().getProductId()==productID)
+                exists = true;
+        
+            if (exists){
+            	Product p = products.retrieve();
+                products.remove();
+                p.setStock(0); //set stock to 0 to mark as removed
+                products.insert(p);
+                return p;
+            }
+        }
+        System.out.println("No product with this ID");
+        return null;
+    }
+
+    public Product updateProduct(){ //updates a product information (name, price, or stock)
+        if (products.empty())
+        {
+            System.out.println("There are no products");
+        }
+        else
+        {
+            System.out.println("Enter product ID: ");
+            int productID = input.nextInt();
+            
+            boolean exists = false;
+            
+            products.findFirst();
+            while (!products.last()) {
+                if (products.retrieve().getProductId() == productID)
+                {
+                    exists = true;
+                    break;
+                }
+                products.findNext();
+            }
+            if (products.retrieve().getProductId()== productID)
+                exists = true;
+        
+            if (exists)
+            {
+                Product p = products.retrieve();
+                products.remove();
+                
+                //Display update options
+                System.out.println("1. Update Name");
+                System.out.println("2. Update Price");
+                System.out.println("3. Update Stock");
+                System.out.println("Pick an option: ");
+                int choice = input.nextInt();
+                
+                switch (choice)
+                {
+                    case 1: //Update Name
+                    {
+                        System.out.println("New Product Name:");
+                        p.setName(input.next());
+                        products.insert(p);
+                    }
+                    break;
+                    
+                    case 2: //Update Price
+                    {
+                        System.out.println("New Price:");
+                        p.setPrice( input.nextDouble());
+                        products.insert(p);
+                    }
+                    break;
+                    
+                    case 3: //Update Stock
+                    {
+                        System.out.println("New Stock:");
+                        int stock = input.nextInt();
+                        p.setStock(stock);
+                        products.insert(p);
+                    }
+                    break;
+                    
+                    default:
+                        System.out.println("Invalid Option");
+                }
+                return p;
+            }
+        }
+        System.out.println("No product with this ID");
+        return null;
+    }
+
+    public Product searchProductName() //searches for a product by name
+    {
+        if (products.empty())
+            System.out.println("There are no products");
+        else
+        {
+            System.out.println("Enter Product Name: ");
+            String name = input.nextLine();
+            name = input.nextLine(); //to handle leftover newline character
+            
+            products.findFirst();
+            for ( int i = 0 ; i < products.size() ; i++)
+            {
+                if (products.retrieve().getName().equalsIgnoreCase(name))
+                    return products.retrieve();
+                products.findNext();
+            }
+        }
+
+        System.out.println("No product with this ID");
+        return null;
+    }
+
+    public void outOfStock() //displays all products that are out of stock
+    {
+        if (products.empty())
+        {
+            System.out.println("There are no products");
+        }
+        else
+        {
+            products.findFirst();
+            for ( int i = 0 ; i < products.size() ; i++)
+            {
+                if (products.retrieve().getStock() == 0)
+                    System.out.println(products.retrieve());    
+                products.findNext();
+            }
+        }
+    }
+
+    public boolean checkProductID( int productID ) //checks if a product ID already exists in the database
+    {
+        if (! products.empty())
+        {
+            products.findFirst();
+            for ( int i = 0 ; i< products.size() ; i++)
+            {
+                if (products.retrieve().getProductId() == productID)
+                    return true; //ID already taken
+                products.findNext();
+            }
+        }
+        return false ;
+    }
+
+    public Product getProductData ( int productID ) //retrieves a product by its ID 
+    {
+        if (! products.empty())
+        {
+            products.findFirst();
+            while (!products.last())
+            {
+                if (products.retrieve().getProductId() == productID)
+                    return products.retrieve();
+                products.findNext();
+            }
+            if (products.retrieve().getProductId()== productID)
+                return products.retrieve();
+        }
+        return null;
+    }
+
+}
