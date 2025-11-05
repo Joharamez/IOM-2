@@ -1,5 +1,4 @@
-package src;
-;
+
 public class Customer {
   
     
@@ -58,15 +57,11 @@ public class Customer {
     }
     
     
-      public boolean removeOrder(Integer orderNo)
-    {
-        if (!orderList.empty())
-        {
+      public boolean removeOrder(Integer orderNo) {
+        if (!orderList.empty()) {
             orderList.findFirst();
-            while(! orderList.last())
-            {
-                if (orderList.retrieve() == orderNo)
-                {
+            while(! orderList.last()) {
+                if (orderList.retrieve() == orderNo) {
                     orderList.remove();
                     return true;
                 }
@@ -86,12 +81,10 @@ public class Customer {
     
     public String toString() {
         String str =  "\nCUSTOMERS:" + "\nCustomer ID: " + customerId + "\nCustomer name: " + name + "\nCustomer email: " + email ;
-        if ( ! orderList.empty())
-        {
+        if ( ! orderList.empty()) {
             str += "\nOrder list: " ;
             orderList.findFirst();
-            while(! orderList.last())
-            {
+            while(! orderList.last()) {
                 str += "\n" + orderList.retrieve() ;
                 orderList.findNext();
             }
