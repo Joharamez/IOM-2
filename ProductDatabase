@@ -1,4 +1,3 @@
-package src;
 
 import java.io.File;
 import java.util.Scanner;
@@ -12,16 +11,14 @@ public class ProductDatabase {
         return products;
     }
     
-    public ProductDatabase(String fileName)
-    {
+    public ProductDatabase(String fileName) {
         
        try{
                 File file = new File(fileName);
                 Scanner read = new Scanner (file);
                 String line = read.nextLine(); //skips header line
                 
-                while(read.hasNext()) //read the file line by line
-                {
+                while(read.hasNext()) {
                     line = read.nextLine();
                     String [] data = line.split(","); //data is stored in CSV
                     
@@ -40,13 +37,11 @@ public class ProductDatabase {
             }
     }
  
-    public void addProduct() //add new product to database
-    {
+    public void addProduct(){
         System.out.println("Enter product ID:");
         int pID = input.nextInt();
         
-        while (checkProductID(pID))
-        {
+        while (checkProductID(pID)) {
             System.out.println("ID already taken, enter different product ID again:");
             pID = input.nextInt();
         }
@@ -65,25 +60,19 @@ public class ProductDatabase {
         products.insert(product);
     }
     
-    public Product searchProductID() //searches for a product by its ID 
-
-    {
-        if (products.empty())
-        {
+    public Product searchProductID() {
+        if (products.empty()) {
             System.out.println("Products are Empty");
         }
-        else
-        {
+        else {
             System.out.println("Enter product ID: ");
             int productID = input.nextInt();
             
             boolean exists = false;
             
             products.findFirst();
-            while (!products.last())
-            {
-                if (products.retrieve().getProductId()==productID)
-                {
+            while (!products.last()) {
+                if (products.retrieve().getProductId()==productID) {
                     exists = true;
                     break;
                 }
@@ -92,30 +81,26 @@ public class ProductDatabase {
             if (products.retrieve().getProductId()==productID) //to check the last element
                 exists = true;
         
-            if (exists )
+            if (exists)
                 return products.retrieve(); //return the founded product
         }
         System.out.println("No product with this ID");
         return null;
     }
 
-    public Product removeProduct() //removes a product by ID (sets its stock to zero)
-    {
+    public Product removeProduct() {
         if (products.empty()) {
         	System.out.println("There are no products");
         }
-        else
-        {
+        else {
             System.out.println("Enter product ID: ");
             int productID = input.nextInt();
             
             boolean exists = false;
             
             products.findFirst();
-            while (!products.last())
-            {
-                if (products.retrieve().getProductId()==productID)
-                {
+            while (!products.last()) {
+                if (products.retrieve().getProductId()==productID) {
                     exists = true;
                     break;
                 }
@@ -136,13 +121,11 @@ public class ProductDatabase {
         return null;
     }
 
-    public Product updateProduct(){ //updates a product information (name, price, or stock)
-        if (products.empty())
-        {
+    public Product updateProduct() { 
+        if (products.empty()) {
             System.out.println("There are no products");
         }
-        else
-        {
+        else {
             System.out.println("Enter product ID: ");
             int productID = input.nextInt();
             
@@ -150,8 +133,7 @@ public class ProductDatabase {
             
             products.findFirst();
             while (!products.last()) {
-                if (products.retrieve().getProductId() == productID)
-                {
+                if (products.retrieve().getProductId() == productID){
                     exists = true;
                     break;
                 }
@@ -160,8 +142,7 @@ public class ProductDatabase {
             if (products.retrieve().getProductId()== productID)
                 exists = true;
         
-            if (exists)
-            {
+            if (exists) {
                 Product p = products.retrieve();
                 products.remove();
                 
@@ -172,26 +153,22 @@ public class ProductDatabase {
                 System.out.println("Pick an option: ");
                 int choice = input.nextInt();
                 
-                switch (choice)
-                {
-                    case 1: //Update Name
-                    {
+                switch (choice) {
+                    case 1: { //Update Name
                         System.out.println("New Product Name:");
                         p.setName(input.next());
                         products.insert(p);
                     }
                     break;
                     
-                    case 2: //Update Price
-                    {
+                    case 2: { //Update Price
                         System.out.println("New Price:");
                         p.setPrice( input.nextDouble());
                         products.insert(p);
                     }
                     break;
                     
-                    case 3: //Update Stock
-                    {
+                    case 3:  { //Update Stock
                         System.out.println("New Stock:");
                         int stock = input.nextInt();
                         p.setStock(stock);
