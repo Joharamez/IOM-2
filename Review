@@ -1,5 +1,3 @@
-package src;
-
 public class Review {
     private int reviewID;
     private int productID;
@@ -63,7 +61,7 @@ public class Review {
         this.comment = comment;
     }
 
-    @Override
+ 
     public String toString() {
         return "\nREVIEW: " + "\nReview ID: " + reviewID + "\nProduct ID: " + productID 
                 + "\n Customer ID: " + customerID + "\nRating score: " + ratingScore + "\nComment=" + comment ;
