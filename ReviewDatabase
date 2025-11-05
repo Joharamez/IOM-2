@@ -1,4 +1,3 @@
-package src;
 import java.io.File;
 import java.util.Scanner;
 public class ReviewDatabase {
@@ -6,8 +5,7 @@ public class ReviewDatabase {
     public static LinkedList<Review> reviewList = new LinkedList<Review> ();
 
 
-    public LinkedList<Review> getreviewsData ( )
-    {
+    public LinkedList<Review> getReviewDatabase ( ) {
         return reviewList;
     }
     
@@ -35,8 +33,7 @@ public class ReviewDatabase {
     }
     
     
-    public Review addReview(int customerID, int productID)
-    {
+    public Review addReview(int customerID, int productID) {
         System.out.println("Enter the review ID: ");
         int reviewID = input.nextInt();
         
@@ -64,10 +61,8 @@ public class ReviewDatabase {
     }
 
  
-    public void updateReview()
-   {
-       if  (reviewList.empty() )
-       {
+    public void updateReview() {
+       if  (reviewList.empty()) {
            System.out.println("There is no review history.");
            return;
        }
@@ -84,8 +79,7 @@ public class ReviewDatabase {
         }        
        
         reviewList.findFirst();
-        while (!reviewList.last())
-        {
+        while (!reviewList.last()) {
             if (reviewList.retrieve().getReviewID() == reviewID)
                 break;
            reviewList.findNext();
@@ -100,8 +94,7 @@ public class ReviewDatabase {
             System.out.println("Enter choice ");
             int choice = input.nextInt();
 
-            switch(choice)
-            {
+            switch(choice) {
                 case 1: //Update the rating only.
                 {
                     System.out.println("Enter the rating score from 1 to 5: ");
@@ -131,13 +124,10 @@ public class ReviewDatabase {
    }
    
  
-    public boolean checkReviewID(int revID )
-    {
-        if (!reviewList.empty())
-        {
+    public boolean checkReviewID(int revID) {
+        if (!reviewList.empty()) {
             reviewList.findFirst();
-            for (int i = 0 ; i<reviewList.size() ; i++)
-            {
+            for (int i = 0 ; i<reviewList.size() ; i++) {
                 if (reviewList.retrieve().getReviewID()== revID)
                     return true;
                 reviewList.findNext();
