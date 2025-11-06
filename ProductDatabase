@@ -65,7 +65,7 @@ public class ProductDatabase {
             System.out.println("Products are Empty");
         }
         else {
-            System.out.println("Enter product ID: ");
+            System.out.println("Enter product ID:");
             int productID = input.nextInt();
             
             boolean exists = false;
@@ -94,7 +94,7 @@ public class ProductDatabase {
             System.out.println("There are no products");
         else
         {
-            System.out.println("Enter Product Name: ");
+            System.out.println("Enter Product Name:");
             String name = input.nextLine();
             name = input.nextLine(); //to handle leftover newline character
             
@@ -116,7 +116,7 @@ public class ProductDatabase {
         	System.out.println("There are no products");
         }
         else {
-            System.out.println("Enter product ID: ");
+            System.out.println("Enter product ID:");
             int productID = input.nextInt();
             
             boolean exists = false;
@@ -149,7 +149,7 @@ public class ProductDatabase {
             System.out.println("There are no products");
         }
         else {
-            System.out.println("Enter product ID: ");
+            System.out.println("Enter product ID:");
             int productID = input.nextInt();
             
             boolean exists = false;
@@ -170,10 +170,10 @@ public class ProductDatabase {
                 products.remove();
                 
                 //Display update options
-                System.out.println("1. Update Name");
-                System.out.println("2. Update Price");
-                System.out.println("3. Update Stock");
-                System.out.println("Pick an option: ");
+                System.out.println("Pick an option:");
+                System.out.println("1.Update Name");
+                System.out.println("2.Update Price");
+                System.out.println("3.Update Stock");
                 int choice = input.nextInt();
                 
                 switch (choice) {
