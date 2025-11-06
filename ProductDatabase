@@ -72,13 +72,13 @@ public class ProductDatabase {
             
             products.findFirst();
             while (!products.last()) {
-                if (products.retrieve().getProductId()==productID) {
+                if (products.retrieve().getProductID()==productID) {
                     exists = true;
                     break;
                 }
                 products.findNext();
             }
-            if (products.retrieve().getProductId()==productID) //to check the last element
+            if (products.retrieve().getProductID()==productID) //to check the last element
                 exists = true;
         
             if (exists)
@@ -123,13 +123,13 @@ public class ProductDatabase {
             
             products.findFirst();
             while (!products.last()) {
-                if (products.retrieve().getProductId()==productID) {
+                if (products.retrieve().getProductID()==productID) {
                     exists = true;
                     break;
                 }
                 products.findNext();
             }
-            if (products.retrieve().getProductId()==productID)
+            if (products.retrieve().getProductID()==productID)
                 exists = true;
         
             if (exists){
@@ -156,13 +156,13 @@ public class ProductDatabase {
             
             products.findFirst();
             while (!products.last()) {
-                if (products.retrieve().getProductId() == productID){
+                if (products.retrieve().getProductID() == productID){
                     exists = true;
                     break;
                 }
                 products.findNext();
             }
-            if (products.retrieve().getProductId()== productID)
+            if (products.retrieve().getProductID()== productID)
                 exists = true;
         
             if (exists) {
@@ -234,7 +234,7 @@ public class ProductDatabase {
             products.findFirst();
             for ( int i = 0 ; i< products.size() ; i++)
             {
-                if (products.retrieve().getProductId() == productID)
+                if (products.retrieve().getProductID() == productID)
                     return true; //ID already taken
                 products.findNext();
             }
@@ -249,11 +249,11 @@ public class ProductDatabase {
             products.findFirst();
             while (!products.last())
             {
-                if (products.retrieve().getProductId() == productID)
+                if (products.retrieve().getProductID() == productID)
                     return products.retrieve();
                 products.findNext();
             }
-            if (products.retrieve().getProductId()== productID)
+            if (products.retrieve().getProductID()== productID)
                 return products.retrieve();
         }
         return null;
