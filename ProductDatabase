@@ -88,6 +88,29 @@ public class ProductDatabase {
         return null;
     }
 
+    public Product searchProductName() //searches for a product by name
+    {
+        if (products.empty())
+            System.out.println("There are no products");
+        else
+        {
+            System.out.println("Enter Product Name: ");
+            String name = input.nextLine();
+            name = input.nextLine(); //to handle leftover newline character
+            
+            products.findFirst();
+            for ( int i = 0 ; i < products.size() ; i++)
+            {
+                if (products.retrieve().getName().equalsIgnoreCase(name))
+                    return products.retrieve();
+                products.findNext();
+            }
+        }
+
+        System.out.println("No product with this ID");
+        return null;
+    }
+    
     public Product removeProduct() {
         if (products.empty()) {
         	System.out.println("There are no products");
@@ -182,29 +205,6 @@ public class ProductDatabase {
                 return p;
             }
         }
-        System.out.println("No product with this ID");
-        return null;
-    }
-
-    public Product searchProductName() //searches for a product by name
-    {
-        if (products.empty())
-            System.out.println("There are no products");
-        else
-        {
-            System.out.println("Enter Product Name: ");
-            String name = input.nextLine();
-            name = input.nextLine(); //to handle leftover newline character
-            
-            products.findFirst();
-            for ( int i = 0 ; i < products.size() ; i++)
-            {
-                if (products.retrieve().getName().equalsIgnoreCase(name))
-                    return products.retrieve();
-                products.findNext();
-            }
-        }
-
         System.out.println("No product with this ID");
         return null;
     }
