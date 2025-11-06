@@ -32,8 +32,8 @@ public static void readData(){
     for(int i=0; i<customers.size(); i++) {
         orders.findFirst();
         for (int j=0;j<orders.size();j++) {
-            if (customers.retrieve().getCustomerId() == orders.retrieve().getCustomerReference()) {
-                int orderID =orders.retrieve().getOrderId();
+            if (customers.retrieve().getCustomerID() == orders.retrieve().getCustomerReference()) {
+                int orderID =orders.retrieve().getOrderID();
                 customers.retrieve().addOrder(orderID);
             }
             orders.findNext();
@@ -46,7 +46,7 @@ public static void readData(){
     for(int i=0; i<products.size(); i++) {
         reviews.findFirst();
         for (int j=0;j<reviews.size();j++){
-            if (products.retrieve().getProductId() == reviews.retrieve().getProduct()) {
+            if (products.retrieve().getProductID() == reviews.retrieve().getProduct()) {
                 int reviewID =reviews.retrieve().getReviewID();
                 products.retrieve().addReview(reviewID);
             }
@@ -154,18 +154,43 @@ public static void main(String[]args) {
 	        
 	        switch (orderChoice) {
 	        case 1: //Create an order
+	        	placeOrder();
 	        	break;
 	        	
 	        case 2: //Cancel order
+	        	cancelOrder();
 	        	break;
 	        	
 	        case 3://Update order status
+                if (orders.empty())
+                    System.out.println("There is no order history");
+                else
+                {
+                    System.out.println("Enter order ID:");
+                    int orderID = input.nextInt();
+                    orderData.updateOrder(orderID);
+                }
 	        	break;
 	        	
 	        case 4: //Search for an order
+                if (orders.empty())
+                    System.out.println("There is no order history");
+                else
+                {
+                    System.out.println("Enter order ID:");
+                    int orderID = input.nextInt();
+                    System.out.println(orderData.searchOrderID(orderID));
+                }
 	        	break;
 	        	
 	        case 5://Display orders between dates
+	        	System.out.println("Enter first date (dd/MM/yyyy)");
+                String date1 = input.next();
+                
+                System.out.println("Enter second date (dd/MM/yyyy)");
+                String date2 = input.next();
+                
+                orderData.ordersBetweenDates(date1,date2);
 	            break;
 	        	
 	        case 6://exit
@@ -245,7 +270,7 @@ public static void placeOrder() {
          System.out.println("Order ID already exists, please re-enter");
          orderID = input.nextInt();
      }
-     newOrder.setOrderId(orderID);
+     newOrder.setOrderID(orderID);
      
      System.out.println("Enter customer ID:");
      int customerID = input.nextInt();
@@ -257,7 +282,7 @@ public static void placeOrder() {
      newOrder.setCustomerReference(customerID);
      
      char answer = 'y';
-     while (answer == 'y' || answer == 'Y') { //remove?
+     while (answer == 'y' || answer == 'Y') { 
          System.out.println("Enter product ID:");
          int productID = input.nextInt();
         
@@ -265,18 +290,18 @@ public static void placeOrder() {
          
          products.findFirst();
          for (int i=0; i<products.size(); i++) {
-             if (products.retrieve().getProductId() == productID) {
+             if (products.retrieve().getProductID() == productID) {
                  if (products.retrieve().getStock() == 0)
-                     System.out.println("product out stock , try another time");
+                     System.out.println("Product out of stock");
                  else {
                      Product pp = products.retrieve();
                      products.remove();
                      pp.setStock(pp.getStock()-1);
                      products.insert(pp);
-                     System.out.println("product added to order");
+                     System.out.println("Product added to order");
                      found = true;
                      
-                     newOrder.addProduct(pp.getProductId());
+                     newOrder.addProduct(pp.getProductID());
                      totalPrice += pp.getPrice();
                  }
                  break;
@@ -285,31 +310,29 @@ public static void placeOrder() {
          }
 
          if (!found)
-                 System.out.println("  No such product id");
+                 System.out.println("Product with this ID does not exist");
              
          
-         System.out.println("Do you want to continue adding product? (Y/N)");
+         System.out.println("Do you want to continue adding a product?");
          answer = input.next().charAt(0);
      }
      
      newOrder.setTotalPrice(totalPrice);
      
-     System.out.println("Enter first date (dd/mm/yyyy)");
-     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+     System.out.println("Enter the date:");
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yyyy");
      LocalDate Ldate = LocalDate.parse(input.next(), formatter);
      newOrder.setDate(Ldate);
 
-     System.out.println("Enter new status  (pending, shipped, delivered, cancelled)....");
+     System.out.println("Enter new status:");
      newOrder.setStatus(input.next());
      
      orders.insert(newOrder);
      
-     // add order to customer list
+
      customers.findFirst();
-     for(int i = 0 ; i < customers.size(); i++)
-     {
-         if (customers.retrieve().getCustomerId() == newOrder.getCustomerReference())
-         {
+     for(int i = 0; i<customers.size(); i++) {
+         if (customers.retrieve().getCustomerID() == newOrder.getCustomerReference()) {
              Customer customer = customers.retrieve();
              customers.remove();
              customer.addOrder(orderID);
@@ -319,52 +342,47 @@ public static void placeOrder() {
          customers.findNext();
      }   
      
-     System.out.println("Order had been added ");
+     System.out.println("Order added successfully");
      System.out.println(orders.retrieve());
 }
 	
 
 public static void cancelOrder() {
-	 System.out.println("Enter order ID to cancel: ");
-     int oid = input.nextInt();
-     Order cancel_order = orderData.searchOrderID(oid);
-     while (cancel_order == null)
-     {
-         System.out.println("Re-enter order id, is not available , try again");
-         oid = input.nextInt();
-         cancel_order = orderData.searchOrderID(oid);
+	 System.out.println("Please enter order ID:");
+     int orderID = input.nextInt();
+     Order cancelOrder = orderData.searchOrderID(orderID);
+     while (cancelOrder == null){
+         System.out.println("Order ID does not exist, please re-enter");
+         orderID = input.nextInt();
+         cancelOrder = orderData.searchOrderID(orderID);
      }
  
-     if ( orderData.cancelOrder(oid) == 1)
-     {
+     if (orderData.cancelOrder(orderID) == 1) {
          customers.findFirst();
-         for ( int i = 0 ; i < customers.size ; i++)
-         {
-             if (customers.retrieve().getCustomerId() == cancel_order.getCustomerReference() )
-             {
-                 Customer cust = customers.retrieve();
+         for (int i=0; i<customers.size; i++) {
+             if (customers.retrieve().getCustomerID() == cancelOrder.getCustomerReference()) {
+                 Customer customer = customers.retrieve();
                  customers.remove();
-                 cust.removeOrder(cancel_order.getOrderId());
-                 customers.insert(cust);
+                 customer.removeOrder(cancelOrder.getOrderID());
+                 customers.insert(customer);
                  break;
              }
              customers.findNext();
          }
          
-         cancel_order.getProducts().findFirst();
-         for ( int x = 0 ; x < cancel_order.getProducts().size() ; x++  )
+         cancelOrder.getProducts().findFirst();
+         for (int j=0; j<cancelOrder.getProducts().size(); j++)
          {
                  products.findFirst();
-                 for (int i = 0 ; i < products.size() ; i++)
-                 {
-                     if (products.retrieve().getProductId() == cancel_order.getProducts().retrieve().byteValue())
+                 for (int i=0; i<products.size(); i++) {
+                     if (products.retrieve().getProductID() == cancelOrder.getProducts().retrieve().byteValue())
                          products.retrieve().addStock(1);
                      products.findNext();
                  }
-                 cancel_order.getProducts().findNext();
+                 cancelOrder.getProducts().findNext();
          }
          
-         System.out.println("order (" + cancel_order.getOrderId() + ") had been cancelled") ;
+         System.out.println("Order has been cancelled") ;
      }    
 	
 }
@@ -416,7 +434,7 @@ public static float averageRating(int productID) {
      for ( int j = 1 ; j <= 3 && top3.length() > 0 ; j++)
      {
          PQElement<Product> top = top3.serve();
-         System.out.println("Product " + j + "  " + top.data.getProductId() 
+         System.out.println("Product " + j + "  " + top.data.getProductID() 
                  + " " + top.data.getName() + " AVG rate (" + top.priority + ")" );
      }
 	 
