@@ -1,3 +1,4 @@
+
 public class Product {
 	
 	public int productID; //product ID
@@ -27,11 +28,11 @@ public class Product {
         return reviews;
     }
     
-    public int getProductId() {
+    public int getProductID() {
         return productID;
     }
 
-    public void setProductId(int productID) {
+    public void setProductID(int productID) {
         this.productID = productID;
     }
 
@@ -66,7 +67,7 @@ public class Product {
     }
     
     //method to decrease stock by a given amount
-    public void removeStock (int stock)
+    public void removeStock(int stock)
     {
         this.stock -= stock;
     }
