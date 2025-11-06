@@ -217,20 +217,40 @@ public static void main(String[]args) {
 	        System.out.println("6.Return Main menu");
 	        reviewChoice = input.nextInt();
 	        
-	        switch(reviewChoice) {
+	       	        switch(reviewChoice) {
 	        case 1://Add review
+	        	createReview();
 	        	break;
 	        	
 	        case 2: //Edit review
+	        	  reviewData.updateReview();
 	        	break;
 	        	
 	        case 3: //Get an average rating for product
+	        {
+                System.out.println("Enter product ID:");
+                int productID = input.nextInt();
+
+                while (!productData.checkProductID(productID))//Product ID doesn't exist.
+                {
+                    System.out.println("Entered product ID doesn't exist. Kindly re-enter the product ID.");
+                    productID = input.nextInt();
+                }
+                double AVG = averageRating(productID);
+                System.out.println("The average rating is " + AVG);
+            }
 	        	break;
 	        	
 	        case 4: //Top 3 products
+	            top3Products();
 	        	break;
 	        	
 	        case 5://Common products with an average rating 4+
+	        
+                Customer c1 =customerData.getCustomerID();
+                Customer c2 =customerData.getCustomerID();
+                commonProducts(c1.getCustomerId(), c2.getCustomerId());
+            
 	        	break;
 	        	
 	        case 6://exit
@@ -240,9 +260,9 @@ public static void main(String[]args) {
 	        }
 	        
 			break;
+		
 		}
 	} while (managerChoice!=5);
-
 	
 
 
@@ -396,9 +416,9 @@ public static void cancelOrder() {
 	
 }
 
-public static float averageRating(int productID) {
+public static double averageRating(int productID) {
 	int counter =0;
-    float rate = 0;
+    double rate = 0;
     
     reviews.findFirst();
     while (! reviews.last())
