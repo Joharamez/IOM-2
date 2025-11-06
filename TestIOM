@@ -89,27 +89,36 @@ public static void main(String[]args) {
 		        
 		        switch(productChoice) {
 		        case 1: //Add new product
+		        	productData.addProduct();
 		        	break;
 		        case 2: //Remove a product
+		        	productData.removeProduct();
 		        	break;
 		        case 3://Update a product
+		        	productData.updateProduct();
 		        	break;
 		        case 4: //Search for a product
-		        	
-		        	
+					System.out.println("Enter your choice:");
+		        	System.out.println("1. Search by ID");
+		        	System.out.println("2. Search by name");
 		        	int searchChoice=input.nextInt();
-		        	System.out.println("Search by ID");
-		        	System.out.println("Search by name");
-		        	
+
 		        	switch(searchChoice) {
 		        	case 1:// Search by ID
+		                Product productID = productData.searchProductID();
+		                if (productID != null)
+		                    System.out.println(productID);
 		        	break;
 		        	case 2:// Search by name
+		                Product prouctName = productData.searchProductName();
+		                if (prouctName != null)
+		                    System.out.println(prouctName);
 		        		break;
 		        	}
 		        	
 		        	break;
 		        case 5: //Track out-of-stock products
+		        	productData.outOfStock();
 		        	break;
 		        	
 		        case 6://exit
