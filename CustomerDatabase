@@ -1,3 +1,5 @@
+package src;
+
 
 import java.io.File;
 import java.util.Scanner;
@@ -40,12 +42,12 @@ public class CustomerDatabase {
     	Customer customer = new Customer ();
 
     	System.out.println("Enter customer's ID: ");
-    	customer.setCustomerId(input.nextInt());
+    	customer.setCustomerID(input.nextInt());
     
-    	while (checkCustomerID(customer.getCustomerId()))
+    	while (checkCustomerID(customer.getCustomerID()))
     {
     		System.out.println("Customer with the entered ID already registered.\nKindly re-enter the ID.");
-    		customer.setCustomerId(input.nextInt());
+    		customer.setCustomerID(input.nextInt());
     }    
     
     	System.out.println("Enter the customer's name: ");
@@ -73,7 +75,7 @@ public class CustomerDatabase {
             
             customers.findFirst();
             for ( int i = 0 ; i < customers.size() ; i++ ) {
-                if (customers.retrieve().getCustomerId() == customerID) {
+                if (customers.retrieve().getCustomerID() == customerID) {
                     exists = true;
                     break;
                 }
@@ -83,7 +85,7 @@ public class CustomerDatabase {
             if (exists) {
                 LinkedList<Integer> orderList = customers.retrieve().getOrders();
                 if (orderList.empty())
-                    System.out.println("No past orders for " + customers.retrieve().getCustomerId());
+                    System.out.println("No past orders for " + customers.retrieve().getCustomerID());
                 else  {
                     System.out.println("Order History: ");
                     orderList.findFirst();
@@ -105,11 +107,11 @@ public class CustomerDatabase {
         if (!customers.empty()){
             customers.findFirst();
             while (!customers.last()) {
-                if (customers.retrieve().getCustomerId() == customerID)
+                if (customers.retrieve().getCustomerID() == customerID)
                     exists = true; //Customer has been found.
                 customers.findNext(); //Moves to the next customer.
             }
-            if (customers.retrieve().getCustomerId() == customerID) //Last element.
+            if (customers.retrieve().getCustomerID() == customerID) //Last element.
                 exists = true;
         }
         return exists ;
@@ -126,11 +128,11 @@ public class CustomerDatabase {
             
             customers.findFirst();
             while (!customers.last()) {
-                if (customers.retrieve().getCustomerId() == customerID)
+                if (customers.retrieve().getCustomerID() == customerID)
                     return customers.retrieve();
                 customers.findNext();
             }
-            if (customers.retrieve().getCustomerId() == customerID) //Last element.
+            if (customers.retrieve().getCustomerID() == customerID) //Last element.
                 return customers.retrieve();        
             
         }
