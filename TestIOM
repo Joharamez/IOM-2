@@ -1,3 +1,5 @@
+package src;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -6,11 +8,11 @@ public class TestIOM {
     
     public static Scanner input = new Scanner (System.in);
     
-    public static ProductDatabase productData = new ProductDatabase("prodcuts.csv");
+    public static ProductDatabase productData = new ProductDatabase("products.csv");
     public static LinkedList<Product>  products;
     
     public static CustomerDatabase customerData = new CustomerDatabase("customers.csv");
-    public  static LinkedList<Customer> customers;
+    public static LinkedList<Customer> customers;
     
     public static OrderDatabase orderData = new OrderDatabase("orders.csv");
     public static LinkedList<Order>  orders;
@@ -22,12 +24,12 @@ public class TestIOM {
 
 
 public static void readData(){
-    products= productData.getProductDatabase();
+    products = productData.getProductDatabase();
     customers = customerData.getCustomerDatabase();
     orders = orderData.getOrderDatabase();
     reviews = reviewData.getReviewDatabase();
 	
-  ///add Orders To Customers
+   //add Orders To Customers
     customers.findFirst();
     for(int i=0; i<customers.size(); i++) {
         orders.findFirst();
@@ -58,7 +60,8 @@ public static void readData(){
     
 }
 public static void main(String[]args) {
-	
+	readData();
+		
 	int managerChoice;
 	int productChoice;
 	int customerChoice;
@@ -129,28 +132,35 @@ public static void main(String[]args) {
 			break;
 			
 		case 2:// Customer Menu
-			System.out.println("Enter your choice");
-	        System.out.println("1.Register new customer");
-	        System.out.println("2.Place an order for a specific customer");
-	        System.out.println("3.View order history");
-	        System.out.println("4.Return to the main menu");
-	        customerChoice = input.nextInt();;
-	        switch (customerChoice) {
-	        case 1: //Register new customer"
-	        	customerData.registerCustomer();
-	        	break;
-	        case 2: //Place an order
-	        	placeOrder();
-	        	break;
-	        case 3: //View order history"
-	        	customerData.orderHistory();
-	        	break;
-	        	
-	        case 4:
-	        	break;
-	        }
+			do {
+				System.out.println("Enter your choice");
+		        System.out.println("1.Register new customer");
+		        System.out.println("2.Place an order for a specific customer");
+		        System.out.println("3.View order history");
+		        System.out.println("4.Reviews for a specific customer");
+		        System.out.println("5.Return to the main menu");
+		        customerChoice = input.nextInt();;
+		        switch (customerChoice) {
+		        case 1: //Register new customer"
+		        	customerData.registerCustomer();
+		        	break;
+		        case 2: //Place an order
+		        	placeOrder();
+		        	break;
+		        case 3: //View order history"
+		        	customerData.orderHistory();
+		        	break;
+		        	
+		        case 4: //Reviews for a specific customer
+		        	reviewsForCustomer();
+		        	break;
+		        	
+		        case 5:
+		        	break;
+		        }
+			}while(customerChoice!=5);
 			break;
-			
+
 		case 3:// Order Menu
 			System.out.println("Enter your choice");
 			System.out.println("1.Create an order");
@@ -213,7 +223,7 @@ public static void main(String[]args) {
 	        System.out.println("2.Edit review");
 	        System.out.println("3.Get an average rating for product");
 	        System.out.println("4.Top 3 products");
-	        System.out.println("5.Common products with an average rating 4+");
+	        System.out.println("5.Common products between 2 customers with an average rating 4+");
 	        System.out.println("6.Return Main menu");
 	        reviewChoice = input.nextInt();
 	        
@@ -247,9 +257,13 @@ public static void main(String[]args) {
 	        	
 	        case 5://Common products with an average rating 4+
 	        
-                Customer c1 =customerData.getCustomerID();
+                System.out.println("First Customer");
+                Customer c1 =customerData.getCustomerID(); 
+                
+                System.out.println("Second Customer");
                 Customer c2 =customerData.getCustomerID();
-                commonProducts(c1.getCustomerId(), c2.getCustomerId());
+
+                commonProducts(c1.getCustomerID(), c2.getCustomerID());
             
 	        	break;
 	        	
@@ -349,7 +363,7 @@ public static void placeOrder() {
      newOrder.setTotalPrice(totalPrice);
      
      System.out.println("Enter the date:");
-     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yyyy");
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
      LocalDate Ldate = LocalDate.parse(input.next(), formatter);
      newOrder.setDate(Ldate);
 
@@ -566,6 +580,46 @@ public static double averageRating(int productID) {
 	        else
 	            System.out.println("Reviews not available for all products");
 	    }
+ 
+ public static LinkedList <Review> reviewsForCustomer() { //return all the reviews for specific customer
+     System.out.println("Enter customer ID:");
+     int customerID = input.nextInt();
+     while(!customerData.checkCustomerID(customerID)) {
+         System.out.println("Customer ID is unavailable, re-enter ID:");
+         customerID = input.nextInt();
+     }
+ 
+     LinkedList <Review> customerReviews = new LinkedList<Review> ();
+     reviews.findFirst();
+     while (!reviews.last()) {
+         if (reviews.retrieve().getCustomer() == customerID)
+        	 customerReviews.insert(reviews.retrieve());
+         reviews.findNext();
+     }
+     if (reviews.retrieve().getCustomer() == customerID)
+    	 customerReviews.insert(reviews.retrieve());
+
+     if (customerReviews.empty())
+         System.out.println("No reviews for customer " + customerID);
+     else
+     {
+         
+    	 customerReviews.findFirst();
+         while ( ! customerReviews.last())
+         {
+             System.out.println(customerReviews.retrieve());
+             Product p = productData.getProductData(customerReviews.retrieve().getProduct());
+             System.out.println(p);
+             System.out.println("");
+             customerReviews.findNext();
+         }
+         System.out.println(customerReviews.retrieve());
+         Product p = productData.getProductData(customerReviews.retrieve().getProduct());
+         System.out.println(p);
+         System.out.println("");
+     }
+     return customerReviews;
+}
+ 
 	 
  }
-
