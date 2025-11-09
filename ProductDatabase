@@ -8,23 +8,24 @@ public class ProductDatabase {
 	public static Scanner input = new Scanner (System.in);
     public static LinkedList<Product> products = new LinkedList<Product> (); //linked list to store all products
 
-    public LinkedList<Product> getProductDatabase() { //returns the list of all products
+    public LinkedList<Product>  getProductDatabase() { //returns the list of all products
         return products;
     }
     
-    public ProductDatabase(String fileName) {
+    public ProductDatabase (String fileName) {
         
        try{
                 File file = new File(fileName);
                 Scanner read = new Scanner (file);
                 String line = read.nextLine(); //skips header line
                 
-                while(read.hasNext()) {
+                while(read.hasNext())
+                {
                     line = read.nextLine();
                     String [] data = line.split(","); //data is stored in CSV
                     
                     int productID = Integer.parseInt(data[0]);
-                    String name =  data[1].trim(); //to remove spaces
+                    String name =  data[1].trim();//to remove spaces
                     double price = Double.parseDouble(data[2]);
                     int stock = Integer.parseInt(data[3]);
 
@@ -34,17 +35,18 @@ public class ProductDatabase {
                 read.close();
             }
             catch (Exception ex) {
-                System.out.println(ex.getMessage()); //print error if file not found or corrupted
+                System.out.println(ex.getMessage());//print error if file not found or corrupted
             }
     }
- 
-    public void addProduct(){
+    
+    public void addProduct()
+    {
         System.out.println("Enter product ID:");
-        int pID = input.nextInt();
-        
-        while (checkProductID(pID)) {
+        int productID = input.nextInt();
+        while (checkProductID(productID))
+        {
             System.out.println("ID already taken, enter different product ID again:");
-            pID = input.nextInt();
+            productID = input.nextInt();
         }
         
         System.out.println("Enter product name:");
@@ -56,7 +58,7 @@ public class ProductDatabase {
         System.out.println("Enter product stock:");
         int stock = input.nextInt();
         
-        Product product = new Product(pID, name, price, stock);
+        Product product = new Product(productID, name, price, stock);
         products.findFirst();
         products.insert(product);
     }
@@ -69,45 +71,25 @@ public class ProductDatabase {
             System.out.println("Enter product ID: ");
             int productID = input.nextInt();
             
-            boolean exists = false;
+            boolean found = false;
             
             products.findFirst();
-            while (!products.last()) {
-                if (products.retrieve().getProductId()==productID) {
-                    exists = true;
+            while (!products.last())
+            {
+                if (products.retrieve().getProductID()== productID)
+                {
+                    found = true;
                     break;
                 }
                 products.findNext();
             }
-            if (products.retrieve().getProductId()==productID) //to check the last element
-                exists = true;
+            if (products.retrieve().getProductID()== productID) //to check the last element
+                found = true;
         
-            if (exists)
+            if (found )
                 return products.retrieve(); //return the founded product
-            
         }
         System.out.println("No product with this ID");
-        return null;
-    }
-
-    public Product searchProductName() { //searches for a product by name
-        if (products.empty()) 
-            System.out.println("There are no products");
-        else {
-            System.out.println("Enter Product Name:");
-            String name = input.nextLine(); //to handle leftover newline character
-            name = input.nextLine();
-
-            products.findFirst();
-            for ( int i = 0 ; i < products.size() ; i++)
-            {
-                if (products.retrieve().getName().compareToIgnoreCase(name)==0)
-                    return products.retrieve();
-                products.findNext();
-            }
-        }
-
-        System.out.println("No product with this name");
         return null;
     }
     
@@ -123,13 +105,13 @@ public class ProductDatabase {
             
             products.findFirst();
             while (!products.last()) {
-                if (products.retrieve().getProductId()==productID) {
+                if (products.retrieve().getProductID()==productID) {
                     exists = true;
                     break;
                 }
                 products.findNext();
             }
-            if (products.retrieve().getProductId()==productID)
+            if (products.retrieve().getProductID()==productID)
                 exists = true;
         
             if (exists){
@@ -156,13 +138,13 @@ public class ProductDatabase {
             
             products.findFirst();
             while (!products.last()) {
-                if (products.retrieve().getProductId() == productID){
+                if (products.retrieve().getProductID() == productID && products.retrieve().getStock() != -1) {
                     exists = true;
                     break;
                 }
                 products.findNext();
             }
-            if (products.retrieve().getProductId()== productID)
+            if (products.retrieve().getProductID()== productID && products.retrieve().getStock() != -1)
                 exists = true;
         
             if (exists) {
@@ -209,6 +191,27 @@ public class ProductDatabase {
         return null;
     }
 
+    public Product searchProductName() { //searches for a product by name
+        if (products.empty()) 
+            System.out.println("There are no products");
+        else {
+            System.out.println("Enter Product Name:");
+            String name = input.nextLine(); //to handle leftover newline character
+            name = input.nextLine();
+
+            products.findFirst();
+            for ( int i = 0 ; i < products.size() ; i++)
+            {
+                if (products.retrieve().getName().compareToIgnoreCase(name)==0)
+                    return products.retrieve();
+                products.findNext();
+            }
+        }
+
+        System.out.println("No product with this name");
+        return null;
+    }
+    
     public void outOfStock() //displays all products that are out of stock
     {
         if (products.empty())
@@ -234,8 +237,23 @@ public class ProductDatabase {
             products.findFirst();
             for ( int i = 0 ; i< products.size() ; i++)
             {
-                if (products.retrieve().getProductId() == productID)
+                if (products.retrieve().getProductID() == productID)
                     return true; //ID already taken
+                products.findNext();
+            }
+        }
+        return false ;
+    }
+    
+    public boolean availableProductID( int productID )
+    {
+        if (! products.empty())
+        {
+            products.findFirst();
+            for ( int i = 0 ; i< products.size() ; i++)
+            {
+                if (products.retrieve().getProductID() == productID && products.retrieve().getStock() != -1)
+                    return true;
                 products.findNext();
             }
         }
@@ -249,11 +267,11 @@ public class ProductDatabase {
             products.findFirst();
             while (!products.last())
             {
-                if (products.retrieve().getProductId() == productID)
+                if (products.retrieve().getProductID() == productID)
                     return products.retrieve();
                 products.findNext();
             }
-            if (products.retrieve().getProductId()== productID)
+            if (products.retrieve().getProductID()== productID)
                 return products.retrieve();
         }
         return null;
