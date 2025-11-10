@@ -1,3 +1,5 @@
+package src;
+
 
 public class LinkedPQ <T>{
 	 class PQNode <T> {
@@ -83,5 +85,3 @@ public class LinkedPQ <T>{
 	            return pqe;
 	    }
 	}
-
-
