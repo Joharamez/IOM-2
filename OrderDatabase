@@ -4,6 +4,8 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class OrderDatabase {
 	 
@@ -61,6 +63,7 @@ public class OrderDatabase {
                 Order order = orders.retrieve(); 
                 order.status = "cancelled";
                 orders.insert(order);
+                writeToFile();
                 return 1; //cancelled 
             }
             else
@@ -96,6 +99,7 @@ public class OrderDatabase {
                 orders.remove();
                 obj.status = str;
                 orders.insert(obj);
+                writeToFile();
                 return true;
             }
         }
@@ -122,7 +126,7 @@ public class OrderDatabase {
             return orders.retrieve();
 
         System.out.println("Order does not exist");
-        return null;
+        	return null;
     }
 
   
@@ -160,4 +164,31 @@ public class OrderDatabase {
         }
         return false;
     }
+    
+    public void writeToFile() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("orders.csv"))) {
+            pw.println("OrderID,CustomerID,ProductIDs,TotalPrice,Date,Status");
+            orders.findFirst();
+            for (int i = 0; i < orders.size(); i++) {
+                Order o = orders.retrieve();
+                // combine product IDs with semicolons
+                StringBuilder productIds = new StringBuilder("\"");
+                o.getProducts().findFirst();
+                for (int j = 0; j < o.getProducts().size(); j++) {
+                    productIds.append(o.getProducts().retrieve());
+                    if (j < o.getProducts().size() - 1)
+                        productIds.append(";");
+                    o.getProducts().findNext();
+                }
+                productIds.append("\"");
+                pw.println(o.getOrderID() + "," + o.getCustomerReference() + "," +
+                           productIds + "," + o.getTotalPrice() + "," +
+                           o.getDate() + "," + o.getStatus());
+                orders.findNext();
+            }
+        } catch (Exception e) {
+            System.out.println("Error writing orders: " + e.getMessage());
+        }
+    }
+    
 }
