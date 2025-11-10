@@ -387,6 +387,10 @@ public static void placeOrder() {
      
      System.out.println("Order added successfully");
      System.out.println(orders.retrieve());
+     orderData.writeToFile();
+     productData.writeToFile();
+     customerData.writeToFile();
+
 }
 	
 
@@ -408,6 +412,7 @@ public static void cancelOrder() {
                  customers.remove();
                  customer.removeOrder(cancelOrder.getOrderID());
                  customers.insert(customer);
+                 customerData.writeToFile();
                  break;
              }
              customers.findNext();
