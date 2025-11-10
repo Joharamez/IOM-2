@@ -1,6 +1,7 @@
 package src;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class Order {
@@ -18,16 +19,21 @@ public class Order {
 	        this.status = "";
 	    }
 
-	    public Order(int orderId, int customerReference, Integer [] productIDs, double totalPrice, String date, String status) {
-	        this.orderId = orderId;
-	        this.customerReference = customerReference;
-	        this.totalPrice = totalPrice;
-	        this.date = LocalDate.parse(date);
-	        this.status = status;
-	        
-	        for (int i = 0 ; i < productIDs.length ; i++)
+	    public Order(int orderId, int customerReference, Integer [] productIDs,
+	             double totalPrice, String date, String status) {
+	    this.orderId = orderId;
+	    this.customerReference = customerReference;
+	    this.totalPrice = totalPrice;
+
+	    // ✅ Use correct date format
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	    this.date = LocalDate.parse(date, formatter);
+
+	    this.status = status;
+
+	    for (int i = 0 ; i < productIDs.length ; i++)
 	        products.insert(productIDs[i]);
-	    }
+	}
 
 	    public int getOrderID() {
 	        return orderId;
