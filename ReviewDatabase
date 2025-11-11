@@ -144,7 +144,7 @@ public class ReviewDatabase {
     }
     
     public void writeToFile() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter("orders.csv"))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("reviews.csv"))) {
             pw.println("ReviewID,ProductID,CustomerID,Rating,Comment");
             reviewList.findFirst();
             for (int i = 0; i < reviewList.size(); i++) {
