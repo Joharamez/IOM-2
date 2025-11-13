@@ -24,10 +24,6 @@ public class Product {
         this.stock = s;
     }
 
-   /*  public LinkedList<Integer> getReviews ()
-    {
-        return reviews;
-    } */
     
     public int getProductID() {
         return productID;
@@ -104,7 +100,7 @@ public class Product {
         return false; //if list is empty or review is not found
     }
     
-    @Override
+   
     public String toString() {
         String str =  "\nProduct ID: " + productID + "\nName: " + name + "\nPrice: " + price ;
         if ( stock == -1)
