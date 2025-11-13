@@ -54,7 +54,7 @@ public class Customer {
     
     public void addOrder (Integer order)
     {
-        orderList.findFirst(); //remove or no???
+        orderList.findFirst(); 
         orderList.insert(order);
     }
     
