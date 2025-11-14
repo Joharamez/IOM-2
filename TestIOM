@@ -259,9 +259,16 @@ public static void main(String[]args) {
 	        
                 System.out.println("First Customer");
                 Customer c1 =customerData.getCustomerID(); 
+                while(c1==null) {
+                	  c1 =customerData.getCustomerID(); 
+                }
                 
                 System.out.println("Second Customer");
                 Customer c2 =customerData.getCustomerID();
+                
+                while(c2==null) {
+                	  c2 =customerData.getCustomerID(); 
+                }
 
                 commonProducts(c1.getCustomerID(), c2.getCustomerID());
             
@@ -455,6 +462,8 @@ public static double averageRating(int productID) {
         rate += reviews.retrieve().getRating();
     }
     
+    if(counter==0)
+    	return 0;
     return (rate/counter);
 	
 }
@@ -471,7 +480,7 @@ public static double averageRating(int productID) {
              
              Product p = products.retrieve();
              double AVGrating = averageRating (p.productID);
-             top3.enqueue(p, AVGrating);
+            top3.enqueue(p, AVGrating);
              
              products.findNext();
          }
