@@ -54,6 +54,7 @@ public class ProductDatabase {
         System.out.println("Enter product name:");
         String name =input.next();
         
+        
         System.out.println("Enter product price:");
         double price = input.nextDouble();
         
@@ -64,6 +65,8 @@ public class ProductDatabase {
         products.findFirst();
         products.insert(product);
         writeToFile();
+        System.out.println("Product added successfully!");
+       
     }
     
     public Product searchProductID() {
@@ -123,6 +126,7 @@ public class ProductDatabase {
                 p.setStock(0); //set stock to 0 to mark as removed
                 products.insert(p);
                 writeToFile();
+                System.out.println("Product stock has been set to zero successfully!");
                 return p;
             }
         }
@@ -168,6 +172,7 @@ public class ProductDatabase {
                         p.setName(input.next());
                         products.insert(p);
                         writeToFile();
+                        System.out.println("Product updated successfully!");
                     }
                     break;
                     
@@ -176,6 +181,7 @@ public class ProductDatabase {
                         p.setPrice( input.nextDouble());
                         products.insert(p);
                         writeToFile();
+                        System.out.println("Product updated successfully!");
                     }
                     break;
                     
@@ -185,6 +191,7 @@ public class ProductDatabase {
                         p.setStock(stock);
                         products.insert(p);
                         writeToFile();
+                        System.out.println("Product updated successfully!");
                     }
                     break;
                     
